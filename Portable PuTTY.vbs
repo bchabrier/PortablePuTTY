@@ -69,8 +69,6 @@ if currentsessions <> savedsessions or true then
     Wscript.Echo "will overwrite"
     case vbNo
     End Select
-
-
 end if
 
 
