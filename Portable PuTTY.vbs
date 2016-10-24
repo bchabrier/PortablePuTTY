@@ -1,0 +1,115 @@
+Set WshShell = CreateObject("WScript.Shell" ) 
+dim fso: set fso = CreateObject("Scripting.FileSystemObject")
+dim CurrentDirectory: CurrentDirectory = WshShell.CurrentDirectory
+
+const ForReading = 1
+const TemporaryFolder = 2
+Set tfolder = fso.GetSpecialFolder(TemporaryFolder)
+
+' create a shortcut with the proper icon
+' this will be useful to put a shortcut in another directory
+ set oShellLink = WshShell.CreateShortcut(CurrentDirectory & "\Portable PuTTY.lnk")
+ oShellLink.TargetPath = WScript.ScriptFullName
+ oShellLink.WindowStyle = 1
+ oShellLink.IconLocation = CurrentDirectory & "\putty.exe, 0"
+ oShellLink.Description = "Shortcut to Portable PuTTY"
+ oShellLink.WorkingDirectory = CurrentDirectory
+ oShellLink.Save
+
+tempregfilename = tfolder.Path & "\" & fso.GetTempName    
+
+function dumpReg()
+	 WshShell.Run "reg export HKEY_CURRENT_USER\Software\SimonTatham\PuTTY " & tempregfilename & " /y", 0, true
+	 dumpReg = fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll()
+end function
+
+function filterString(s)
+	 Set regEx = new RegExp
+
+	 dim result: result = s
+
+	 ' ignore first line
+	 regEx.Pattern = ".*"
+	 regEx.IgnoreCase = False
+	 regEx.MultiLine = True
+	 regEx.Global = False
+	 result = regEx.Replace(result, "<ignore>")
+
+	 ' ignore RandSeedFile
+	 regEx.Pattern = """RandSeedFile""=.*"
+	 regEx.IgnoreCase = False
+	 regEx.MultiLine = True
+	 regEx.Global = False
+	 result = regEx.Replace(result, "<ignore>")
+
+	 ' ignore Recent sessions
+	 regEx.Pattern = """Recent sessions""=.*"
+	 regEx.IgnoreCase = False
+	 regEx.MultiLine = True
+	 regEx.Global = False
+	 result = regEx.Replace(result, "<ignore>")
+
+	 filterString = result
+end function
+
+' get current list of sessions
+currentsessions = filterString(dumpReg())
+savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
+savedsessions = filterString(savedreg)
+
+' compare to what we are about to override
+if currentsessions <> savedsessions or true then
+   ' if different, propose to clear previous one
+   ret = msgbox("The following local sessions already exist. Overwrite them?" & chr(10) & "coucou", vbYesNoCancel, "Overwrite local sessions?")
+   Select case ret
+	case vbCancel
+      Wscript.Quit
+	case vbYes
+		WshShell.Run "reg delete HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions /va /f", 0, true
+   Wscript.Echo "will overwrite"
+	case vbNo
+   End Select
+
+
+end if
+
+
+' import saved sessions
+WshShell.Run "reg import putty.reg", 0, true
+
+' update link to rnd file
+WshShell.Run "reg add HKEY_CURRENT_USER\Software\SimonTatham\PuTTY /v RandSeedFile /d " & fso.BuildPath(CurrentDirectory, "putty.rnd") & " /f", 0, true
+
+' run executable, wait for its end
+WshShell.Run "putty.exe", 1, true
+
+' dump current sessions
+currentreg = dumpReg()
+
+' check if we need to save the current sessions
+if currentreg <> savedreg then
+	' if needed, save them
+	if fso.FileExists("putty.bak") then
+		if fso.FileExists("putty.bak.bak") then
+			fso.DeleteFile("putty.bak.bak")
+		end if
+		fso.MoveFile "putty.bak", "putty.bak.bak"
+	end if
+	if fso.FileExists("putty.reg") then
+		fso.MoveFile "putty.reg", "putty.bak"
+	end if
+	fso.CopyFile tempregfilename, "putty.reg"
+end if
+
+
+' do some cleaning
+fso.DeleteFile(tempregfilename)
+Set WshShell = Nothing
+set fso = Nothing
+
+
+
+rem regedit /s puttydel.reg
+rem pause
+
+
