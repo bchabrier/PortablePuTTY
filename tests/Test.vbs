@@ -1,3 +1,5 @@
+Set WshShell = CreateObject("WScript.Shell" ) 
+
 sub TestShortcutCreated
   WshShell.Run "..\Portable PuTTY.vbs", 1, true
   Assert.IsTrue "a" = "a"
@@ -6,5 +8,7 @@ sub TestShortcutCreated
   Assert.IsTrue 123 = 123, "123 should match"
   Assert.IsTrue 123 > 1, "123 is not more than 1"
 end sub
+
+Set WshShell = Nothing
 
 
