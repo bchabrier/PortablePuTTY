@@ -8,48 +8,48 @@ Set tfolder = fso.GetSpecialFolder(TemporaryFolder)
 
 ' create a shortcut with the proper icon
 ' this will be useful to put a shortcut in another directory
- set oShellLink = WshShell.CreateShortcut(CurrentDirectory & "\Portable PuTTY.lnk")
- oShellLink.TargetPath = WScript.ScriptFullName
- oShellLink.WindowStyle = 1
- oShellLink.IconLocation = CurrentDirectory & "\putty.exe, 0"
- oShellLink.Description = "Shortcut to Portable PuTTY"
- oShellLink.WorkingDirectory = CurrentDirectory
- oShellLink.Save
+set oShellLink = WshShell.CreateShortcut(CurrentDirectory & "\Portable PuTTY.lnk")
+oShellLink.TargetPath = WScript.ScriptFullName
+oShellLink.WindowStyle = 1
+oShellLink.IconLocation = CurrentDirectory & "\putty.exe, 0"
+oShellLink.Description = "Shortcut to Portable PuTTY"
+oShellLink.WorkingDirectory = CurrentDirectory
+oShellLink.Save
 
 tempregfilename = tfolder.Path & "\" & fso.GetTempName    
 
 function dumpReg()
-	 WshShell.Run "reg export HKEY_CURRENT_USER\Software\SimonTatham\PuTTY " & tempregfilename & " /y", 0, true
-	 dumpReg = fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll()
+	WshShell.Run "reg export HKEY_CURRENT_USER\Software\SimonTatham\PuTTY " & tempregfilename & " /y", 0, true
+	dumpReg = fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll()
 end function
 
 function filterString(s)
-	 Set regEx = new RegExp
+    Set regEx = new RegExp
 
-	 dim result: result = s
+    dim result: result = s
 
-	 ' ignore first line
-	 regEx.Pattern = ".*"
-	 regEx.IgnoreCase = False
-	 regEx.MultiLine = True
-	 regEx.Global = False
-	 result = regEx.Replace(result, "<ignore>")
+    ' ignore first line
+    regEx.Pattern = ".*"
+    regEx.IgnoreCase = False
+    regEx.MultiLine = True
+    regEx.Global = False
+    result = regEx.Replace(result, "<ignore>")
 
-	 ' ignore RandSeedFile
-	 regEx.Pattern = """RandSeedFile""=.*"
-	 regEx.IgnoreCase = False
-	 regEx.MultiLine = True
-	 regEx.Global = False
-	 result = regEx.Replace(result, "<ignore>")
+    ' ignore RandSeedFile
+    regEx.Pattern = """RandSeedFile""=.*"
+    regEx.IgnoreCase = False
+    regEx.MultiLine = True
+    regEx.Global = False
+    result = regEx.Replace(result, "<ignore>")
 
-	 ' ignore Recent sessions
-	 regEx.Pattern = """Recent sessions""=.*"
-	 regEx.IgnoreCase = False
-	 regEx.MultiLine = True
-	 regEx.Global = False
-	 result = regEx.Replace(result, "<ignore>")
+    ' ignore Recent sessions
+    regEx.Pattern = """Recent sessions""=.*"
+    regEx.IgnoreCase = False
+    regEx.MultiLine = True
+    regEx.Global = False
+    result = regEx.Replace(result, "<ignore>")
 
-	 filterString = result
+    filterString = result
 end function
 
 ' get current list of sessions
@@ -59,16 +59,16 @@ savedsessions = filterString(savedreg)
 
 ' compare to what we are about to override
 if currentsessions <> savedsessions or true then
-   ' if different, propose to clear previous one
-   ret = msgbox("The following local sessions already exist. Overwrite them?" & chr(10) & "coucou", vbYesNoCancel, "Overwrite local sessions?")
-   Select case ret
-	case vbCancel
-      Wscript.Quit
-	case vbYes
-		WshShell.Run "reg delete HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions /va /f", 0, true
-   Wscript.Echo "will overwrite"
-	case vbNo
-   End Select
+    ' if different, propose to clear previous one
+    ret = msgbox("The following local sessions already exist. Overwrite them?" & chr(10) & "coucou", vbYesNoCancel, "Overwrite local sessions?")
+    Select case ret
+    case vbCancel
+        Wscript.Quit
+    case vbYes
+	    WshShell.Run "reg delete HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions /va /f", 0, true
+    Wscript.Echo "will overwrite"
+    case vbNo
+    End Select
 
 
 end if
@@ -88,17 +88,17 @@ currentreg = dumpReg()
 
 ' check if we need to save the current sessions
 if currentreg <> savedreg then
-	' if needed, save them
-	if fso.FileExists("putty.bak") then
-		if fso.FileExists("putty.bak.bak") then
-			fso.DeleteFile("putty.bak.bak")
-		end if
-		fso.MoveFile "putty.bak", "putty.bak.bak"
-	end if
-	if fso.FileExists("putty.reg") then
-		fso.MoveFile "putty.reg", "putty.bak"
-	end if
-	fso.CopyFile tempregfilename, "putty.reg"
+    ' if needed, save them
+    if fso.FileExists("putty.bak") then
+        if fso.FileExists("putty.bak.bak") then
+	        fso.DeleteFile("putty.bak.bak")
+        end if
+        fso.MoveFile "putty.bak", "putty.bak.bak"
+    end if
+    if fso.FileExists("putty.reg") then
+	    fso.MoveFile "putty.reg", "putty.bak"
+    end if
+    fso.CopyFile tempregfilename, "putty.reg"
 end if
 
 

@@ -13,3 +13,8 @@ A typical use is to copy **Portable PuTTY** on a USB drive or a dropbox folder.
 
 Launch `Portable PuTTY.vbs`. 
 At first launch, this creates a shortcut named `Portable PuTTY.lnk`. You can then use this shortcut or copy it for instance to your desktop to launch **Portable PuTTY** more conveniently.
+
+## Backup
+
+**Portable PuTTY** keeps saved sessions in `PuTTY.reg`. The previous versions are kept in `PuTTY.bak` and `PuTTY.bak.bak`.
+
