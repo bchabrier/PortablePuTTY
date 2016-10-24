@@ -1,3 +1,2 @@
-.\scriptunit.exe /Q /log test_results.xml .
-pause
+tests\scriptunit.exe /Q /log test_results.xml .
 
