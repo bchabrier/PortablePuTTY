@@ -1,0 +1,9 @@
+﻿################################################################################
+# Ce fichier .gitignore a été créé automatiquement par Microsoft(R) Visual Studio.
+################################################################################
+
+/Portable PuTTY.lnk
+/putty.reg
+/putty.rnd
+*.md~
+*.vbs~
