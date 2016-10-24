@@ -18,3 +18,7 @@ At first launch, this creates a shortcut named `Portable PuTTY.lnk`. You can the
 
 **Portable PuTTY** keeps saved sessions in `PuTTY.reg`. The previous versions are kept in `PuTTY.bak` and `PuTTY.bak.bak`.
 
+## Tests
+
+The tests suite uses ScriptUnit (see http://xt1.org/scriptunit). Note that it is necessary to run `scriptunit.exe` as administrator once in order to register its libraries correctly.
+
