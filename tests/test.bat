@@ -1,5 +1,5 @@
-echo %~dp0%
-tests\scriptunit.exe /Q /log test_results.xml tests
+cd %~dp0%
+.\scriptunit.exe /Q /log test_results.xml .
 type test_results.xml
 
 
