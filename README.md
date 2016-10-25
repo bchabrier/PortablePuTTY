@@ -7,7 +7,9 @@ It allows to persist saved sessions and share them across computers.
 
 ## Installation
 
-A typical use is to copy **Portable PuTTY** on a USB drive or a dropbox folder.
+Installation consists in copying `Portable PuTTY.vbs` in a shared folder.
+
+A typical use is to install **Portable PuTTY** on a USB drive or a dropbox folder.
 
 ## Usage
 
