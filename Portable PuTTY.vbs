@@ -53,12 +53,17 @@ function filterString(s)
 end function
 
 ' get current list of sessions
-currentsessions = filterString(dumpReg())
-savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
-savedsessions = filterString(savedreg)
+if fso.FileExists("putty.reg") then
+   savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
+   savedsessions = filterString(savedreg)
+   currentsessions = filterString(dumpReg())
+else
+   savedsessions = ""
+   currentsessions = ""
+end if
 
 ' compare to what we are about to override
-if currentsessions <> savedsessions or true then
+if currentsessions <> savedsessions then
     ' if different, propose to clear previous one
     ret = msgbox("The following local sessions already exist. Overwrite them?" & chr(10) & "coucou", vbYesNoCancel, "Overwrite local sessions?")
     Select case ret
