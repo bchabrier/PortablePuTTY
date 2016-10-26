@@ -20,7 +20,11 @@ tempregfilename = tfolder.Path & "\" & fso.GetTempName
 
 function dumpReg()
 	WshShell.Run "reg export HKEY_CURRENT_USER\Software\SimonTatham\PuTTY " & tempregfilename & " /y", 0, true
-	dumpReg = fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll()
+	if fso.FileExists(tempregfilename) then
+	   dumpReg = fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll()
+	else
+	   dumpReg = ""
+	end if
 end function
 
 function filterString(s)
@@ -56,41 +60,46 @@ end function
 if fso.FileExists("putty.reg") then
    savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
    savedsessions = filterString(savedreg)
-   currentsessions = filterString(dumpReg())
 else
-   savedsessions = ""
-   currentsessions = ""
+   savedsessions = "<ignore>"
 end if
 
-' compare to what we are about to override
-if currentsessions <> savedsessions then
+localsessions = filterString(dumpReg())
+
+' compare to local sessions
+useLocalSessions=false
+if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then
+'Wscript.Echo localsessions
+'script.Echo savedsessions
     ' if different, propose to clear previous one
-    ret = msgbox("The following local sessions already exist. Overwrite them?" & chr(10) & "coucou", vbYesNoCancel, "Overwrite local sessions?")
+    ret = msgbox("Local sessions already exist:" & chr(10) & "coucou" & chr(10) & chr(10) & "You can choose to use them or to overwrite them with the saved session." & chr(10) & chr(10) & "Do you want to use the local sessions?", vbYesNoCancel, "Use local sessions?")
     Select case ret
     case vbCancel
-        Wscript.Quit
-    case vbYes
-	    WshShell.Run "reg delete HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions /va /f", 0, true
-    Wscript.Echo "will overwrite"
+       Wscript.Quit
     case vbNo
+       WshShell.Run "reg delete HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions /va /f", 0, true
+    case vbYes
+       useLocalSessions=true
     End Select
 end if
 
+if not useLocalSessions then
+  ' import saved sessions
+  WshShell.Run "reg import putty.reg", 0, true
 
-' import saved sessions
-WshShell.Run "reg import putty.reg", 0, true
-
-' update link to rnd file
-WshShell.Run "reg add HKEY_CURRENT_USER\Software\SimonTatham\PuTTY /v RandSeedFile /d " & fso.BuildPath(CurrentDirectory, "putty.rnd") & " /f", 0, true
+  ' update link to rnd file
+  WshShell.Run "reg add HKEY_CURRENT_USER\Software\SimonTatham\PuTTY /v RandSeedFile /d " & fso.BuildPath(CurrentDirectory, "putty.rnd") & " /f", 0, true
+end if
 
 ' run executable, wait for its end
 WshShell.Run "putty.exe", 1, true
 
-' dump current sessions
-currentreg = dumpReg()
+if not useLocalSessions then
+  ' dump current sessions
+  currentreg = dumpReg()
 
-' check if we need to save the current sessions
-if currentreg <> savedreg then
+  ' check if we need to save the current sessions
+  if currentreg <> savedreg then
     ' if needed, save them
     if fso.FileExists("putty.bak") then
         if fso.FileExists("putty.bak.bak") then
@@ -102,11 +111,13 @@ if currentreg <> savedreg then
 	    fso.MoveFile "putty.reg", "putty.bak"
     end if
     fso.CopyFile tempregfilename, "putty.reg"
+  end if
 end if
 
-
 ' do some cleaning
-fso.DeleteFile(tempregfilename)
+if fso.FileExists(tempregfilename) then
+   fso.DeleteFile(tempregfilename)
+end if
 Set WshShell = Nothing
 set fso = Nothing
 
