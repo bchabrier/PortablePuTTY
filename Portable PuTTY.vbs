@@ -66,6 +66,11 @@ end if
 
 localsessions = filterString(dumpReg())
 
+WshShell.Run "cmd /d /c echo " & "savedsessions" & " >> output.log", 0, true
+WshShell.Run "cmd /d /c echo " & savedsessions & " >> output.log", 0, true
+WshShell.Run "cmd /d /c echo " & "localsessions" & " >> output.log", 0, true
+WshShell.Run "cmd /d /c echo " & localsessions & " >> output.log", 0, true
+
 ' compare to local sessions
 useLocalSessions=false
 if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then
