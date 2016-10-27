@@ -115,6 +115,7 @@ end sub
 sub cleanDir()
   deleteFile("Portable PuTTY.lnk")
   deleteFile("stubputty.bat")
+  deleteFile("stubmsgbox.bat")
   deleteFile("init.reg")
   deleteFile("run.reg")
   deleteFile("putty.reg")
