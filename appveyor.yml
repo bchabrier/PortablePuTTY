@@ -9,6 +9,7 @@ build: off
 test_script:
   - echo This is my custom test script
   - tests\run_tests nopause
-  - ps: (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test_results.xml))  
+  - rem the below unfortunately doesn't work
+  - rem ps: (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test_results.xml))  
   
   
