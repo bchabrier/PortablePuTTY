@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/k04ikl250e64lwcq?svg=true)](https://ci.appveyor.com/project/bchabrier/portableputty)
+
 # PortablePuTTY
 Portable packaging of PuTTY
 
