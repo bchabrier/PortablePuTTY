@@ -66,13 +66,14 @@ end if
 
 localsessions = filterString(dumpReg())
 
-WshShell.Run "cmd /d /c echo coucou >> output.log", 0, true
-
 ' compare to local sessions
 useLocalSessions=false
 if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then
 'Wscript.Echo localsessions
 'script.Echo savedsessions
+
+WshShell.Run "cmd /d /c echo different >> output.log", 0, true
+
     ' if different, propose to clear previous one
     ret = msgbox("Local sessions already exist:" & chr(10) & "coucou" & chr(10) & chr(10) & "You can choose to use them or to overwrite them with the saved session." & chr(10) & chr(10) & "Do you want to use the local sessions?", vbYesNoCancel, "Use local sessions?")
     Select case ret
