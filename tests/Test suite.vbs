@@ -39,11 +39,11 @@ sub setup()
   Set regEx = new RegExp
 
   ' stub call to putty.exe
-  regEx.Pattern = """putty.exe"""
+  regEx.Pattern = "Run ""putty.exe"""
   regEx.IgnoreCase = False
   regEx.MultiLine = True
   regEx.Global = False
-  targetvbs = regEx.Replace(targetvbs, """""""test data\stubputty.bat""""""")
+  targetvbs = regEx.Replace(targetvbs, "Run """"""test data\stubputty.bat""""""")
 
   ' stub call to msgbox
   regEx.Pattern = "msgbox"
@@ -119,6 +119,7 @@ sub cleanDir()
   deleteFile("init.reg")
   deleteFile("run.reg")
   deleteFile("putty.reg")
+  deleteFile("putty.exe")
 end sub
 
 ' cleans the registry
@@ -154,14 +155,18 @@ end function
 
 ' verifies that a shortcut is created
 ' when Portable PuTTY is run
-sub iTestShortcutCreated
+sub TestShortcutCreated
+  prepareTest("TestShortcutCreated")
   runPortablePuTTY
   Assert.IsTrue FileExists("Portable PuTTY.lnk"), "Shortcut was not created"
 end sub
 
 ' check that putty.exe is downloaded
-sub ignoreTestPuttyDownloaded
-  Assert.IsTrue false
+sub TestPuttyDownloaded
+  prepareTest("TestPuttyDownloaded")
+  Assert.IsFalse FileExists("putty.exe"), "putty.exe should not exist"
+  runPortablePuTTY
+  Assert.IsTrue FileExists("putty.exe"), "putty.exe was not downloaded"
 end sub
 
 sub TestFirstLaunchNoLocalWithModif

@@ -74,6 +74,28 @@ else
    savedsessions = "<ignore>"
 end if
 
+' check if putty.exe exists, if not, download it
+if not fso.FileExists("putty.exe") then
+   puttyUrl = "https://the.earth.li/~sgtatham/putty/latest/x86/putty.exe"
+   ret = msgbox("Download putty.exe from """ & puttyUrl & """?", vbOKCancel, "Download putty.exe?")
+   if ret = vbCancel then
+     Wscript.Quit
+   end if
+
+   ' download putty.exe
+   dim xHttp: Set xHttp = createobject("Microsoft.XMLHTTP")
+   dim bStrm: Set bStrm = createobject("Adodb.Stream")
+   xHttp.Open "GET", puttyUrl, False
+   xHttp.Send
+
+   with bStrm
+     .type = 1 '//binary
+     .open
+     .write xHttp.responseBody
+     .savetofile "putty.exe", 2 '//overwrite
+   end with
+end if
+
 localsessions = filterString(dumpReg())
 
 ' compare to local sessions
