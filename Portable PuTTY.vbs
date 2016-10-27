@@ -61,7 +61,9 @@ if fso.FileExists("putty.reg") then
    WshShell.Run "cmd /d /c echo " & "putty.reg exists" & " >> output.log", 0, true
    WshShell.Run "cmd /d /c dir >> output.log", 0, true
    savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
-   WshShell.Run "cmd /d /c echo " & savedreg & " >> output.log", 0, true
+   WshShell.Run "cmd /d /c echo savedreg: """ & savedreg & """ >> output.log", 0, true
+   initreg = fso.GetFile("init.reg").OpenAsTextStream(ForReading, -2).ReadAll()
+   WshShell.Run "cmd /d /c echo " & initreg & " >> output.log", 0, true
    savedsessions = filterString(savedreg)
 else
    savedsessions = "<ignore>"
