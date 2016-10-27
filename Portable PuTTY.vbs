@@ -94,6 +94,9 @@ if not fso.FileExists("putty.exe") then
      .write xHttp.responseBody
      .savetofile "putty.exe", 2 '//overwrite
    end with
+
+   set xHttp = Nothing
+   set bStrm = Nothing
 end if
 
 localsessions = filterString(dumpReg())
