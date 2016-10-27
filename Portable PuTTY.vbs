@@ -56,13 +56,15 @@ function filterString(s)
     filterString = result
 end function
 
+function debug(msg)
+   fso.GetFile("output.log").OpenAsTextStream(8, -2).Write(msg)
+end function
+
 ' get current list of sessions
 if fso.FileExists("putty.reg") then
    WshShell.Run "cmd /d /c echo " & "putty.reg exists" & " >> output.log", 0, true
    WshShell.Run "cmd /d /c dir >> output.log", 0, true
    savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
-   WshShell.Run "cmd /d /c echo savedreg: """ & savedreg & """ >> output.log", 0, true
-   fso.GetFile("output.log").OpenAsTextStream(8, -2).Write(savedreg)
    savedsessions = filterString(savedreg)
 else
    savedsessions = "<ignore>"
@@ -71,9 +73,9 @@ end if
 localsessions = filterString(dumpReg())
 
 WshShell.Run "cmd /d /c echo " & "savedsessions" & " >> output.log", 0, true
-WshShell.Run "cmd /d /c echo " & savedsessions & " >> output.log", 0, true
+debug(savedsessions)
 WshShell.Run "cmd /d /c echo " & "localsessions" & " >> output.log", 0, true
-WshShell.Run "cmd /d /c echo " & localsessions & " >> output.log", 0, true
+debug(localsessions)
 
 ' compare to local sessions
 useLocalSessions=false
