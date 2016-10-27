@@ -66,7 +66,7 @@ end if
 
 localsessions = filterString(dumpReg())
 
-WshShell.Run "echo coucou > output.log", 0, true
+WshShell.Run "cmd /c echo coucou > output.log", 0, true
 
 ' compare to local sessions
 useLocalSessions=false
