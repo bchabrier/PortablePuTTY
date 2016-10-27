@@ -116,6 +116,13 @@ if not useLocalSessions then
 
   ' check if we need to save the current sessions
   if currentreg <> savedreg then
+
+if fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
+   debug("before copy, tempregfilename <> putty.reg")
+else
+   debug("before copy, tempregfilename = putty.reg")
+end if
+
     ' if needed, save them
     if fso.FileExists("putty.bak") then
         if fso.FileExists("putty.bak.bak") then
@@ -126,11 +133,6 @@ if not useLocalSessions then
     if fso.FileExists("putty.reg") then
 	    fso.MoveFile "putty.reg", "putty.bak"
     end if
-'if fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
-   'debug("before copy, tempregfilename <> putty.reg")
-'else
-   'debug("before copy, tempregfilename = putty.reg")
-'end if
     fso.CopyFile tempregfilename, "putty.reg"
 'if fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
    'debug("after copy, tempregfilename <> putty.reg")
