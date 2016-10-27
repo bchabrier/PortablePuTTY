@@ -123,7 +123,9 @@ if not useLocalSessions then
     if fso.FileExists("putty.reg") then
 	    fso.MoveFile "putty.reg", "putty.bak"
     end if
-debug("copying to putty.reg")
+debug("copying to putty.reg\n")
+debug(fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll())
+debug("\nend\n")
     fso.CopyFile tempregfilename, "putty.reg"
   end if
 end if
