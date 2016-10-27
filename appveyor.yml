@@ -12,6 +12,6 @@ test_script:
   - rem the below unfortunately doesn't work
   - rem ps: (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test_results.xml))  
   - ps: select-string -path test_results.xml -pattern "success=""False"""
-  - ps: if ((select-string -path test_results.xml -pattern "success=""False""") -ne "") { errorstatement } 
+  - ps: if ((select-string -path test_results.xml -pattern "success=""False""") -ne "") { "cond true" } else { "condition false" }
   
   
