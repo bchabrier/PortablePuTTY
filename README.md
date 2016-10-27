@@ -1,6 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/k04ikl250e64lwcq?svg=true)](https://ci.appveyor.com/project/bchabrier/portableputty)
 
-# PortablePuTTY
+# Portable PuTTY
 Portable packaging of PuTTY
 
 **Portable PuTTY** provides a portable version of **PuTTY** (see http://www.putty.org/).
