@@ -160,11 +160,11 @@ sub iTestShortcutCreated
 end sub
 
 ' check that putty.exe is downloaded
-sub iTestPuttyDownloaded
+sub ignoreTestPuttyDownloaded
   Assert.IsTrue false
 end sub
 
-sub iTestFirstLaunchNoLocalWithModif
+sub TestFirstLaunchNoLocalWithModif
   prepareTest("TestFirstLaunchNoLocalWithModif")
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
@@ -172,7 +172,7 @@ sub iTestFirstLaunchNoLocalWithModif
   Assert.Equal dumpReg(), readFile("run.reg"), "registry not as modified by putty.exe"
 end sub
 
-sub iTestFirstLaunchWithLocalWithModif
+sub TestFirstLaunchWithLocalWithModif
   prepareTest("TestFirstLaunchWithLocalWithModif")
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
@@ -180,7 +180,7 @@ sub iTestFirstLaunchWithLocalWithModif
   Assert.Equal dumpReg(), readFile("run.reg"), "registry not as modified by putty.exe"
 end sub
 
-sub iTestFirstLaunchWithLocalNoModif
+sub TestFirstLaunchWithLocalNoModif
   prepareTest("TestFirstLaunchWithLocalNoModif")
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
@@ -188,7 +188,7 @@ sub iTestFirstLaunchWithLocalNoModif
   Assert.Equal dumpReg(), readFile("init.reg"), "registry not as initial"
 end sub
 
-sub iTestFreshLaunchNoModif
+sub TestFreshLaunchNoModif
   prepareTest("TestFreshLaunchNoModif")
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
@@ -204,20 +204,20 @@ sub TestNormalLaunchNoModif
   Assert.Equal dumpReg(), readFile("putty.reg"), "registry not as saved"
 end sub
 
-sub iTestUseLocalNoModif
+sub TestUseLocalNoModif
   prepareTest("TestUseLocalNoModif")
   runPortablePuTTY
   Assert.Equal dumpReg(), readFile("init.reg"), "register should not be modified"
 end sub
 
-sub iTestUseSavedNoModif
+sub TestUseSavedNoModif
   prepareTest("TestUseSavedNoModif")
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
   Assert.Equal dumpReg(), readFile("putty.reg"), "putty.reg should be dumped"
 end sub
 
-sub iTestCancelUseLocal
+sub TestCancelUseLocal
   prepareTest("TestCancelUseLocal")
   runPortablePuTTY
   Assert.NotEqual dumpReg(), readFile("run.reg"), "putty.exe should not have run"
