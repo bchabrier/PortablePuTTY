@@ -57,7 +57,7 @@ function filterString(s)
 end function
 
 function debug(msg)
-   fso.GetFile("output.log").OpenAsTextStream(8, -2).Write(msg)
+   fso.GetFile("output.log").OpenAsTextStream(8, -2).Write(msg & Chr(10))
 end function
 
 ' get current list of sessions
@@ -123,10 +123,17 @@ if not useLocalSessions then
     if fso.FileExists("putty.reg") then
 	    fso.MoveFile "putty.reg", "putty.bak"
     end if
-debug("copying to putty.reg\n")
-debug(fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll())
-debug("\nend\n")
+if fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
+   debug('before copy, tempregfilename <> putty.reg')
+else
+   debug('before copy, tempregfilename = putty.reg')
+end if
     fso.CopyFile tempregfilename, "putty.reg"
+if fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
+   debug('after copy, tempregfilename <> putty.reg')
+else
+   debug('after copy, tempregfilename = putty.reg')
+end if
   end if
 end if
 
