@@ -113,6 +113,7 @@ end sub
 
 ' cleans the directory, removing all generated files
 sub cleanDir()
+  deleteFile("Portable PuTTY.vbs")
   deleteFile("Portable PuTTY.lnk")
   deleteFile("stubputty.bat")
   deleteFile("stubmsgbox.bat")
@@ -132,7 +133,7 @@ end sub
 ' execute Portable PuTTY.vbs
 sub runPortablePuTTY
   Set WshShell = CreateObject("WScript.Shell" )
-  Assert.trace WshShell.CurrentDirectory
+  'Assert.trace WshShell.CurrentDirectory
   WshShell.Run """Portable PuTTY.vbs""", 1, true
   Set WshShell = Nothing
 end sub
