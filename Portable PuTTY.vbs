@@ -66,6 +66,8 @@ end if
 
 localsessions = filterString(dumpReg())
 
+WshShell.Run "echo coucou", 0, true
+
 ' compare to local sessions
 useLocalSessions=false
 if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then

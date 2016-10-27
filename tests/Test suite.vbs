@@ -180,6 +180,7 @@ end sub
 
 sub TestNormalLaunchNoModif
   prepareTest("TestNormalLaunchNoModif")
+  Assert.Equal readFile("putty.reg"), readFile("init.reg"), "putty.reg and init.reg should be identical at the start of the test"
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
   Assert.Equal readFile("putty.reg"), readFile("init.reg"), "putty.reg and init.reg differ"
