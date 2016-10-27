@@ -56,6 +56,34 @@ function filterString(s)
     filterString = result
 end function
 
+Dim objProgressMsg
+Function ProgressMsg( strMessage, strWindowTitle )
+    ' inspired from Denis St-Pierre (http://www.robvanderwoude.com/vbstech_ui_progress.php)
+    Dim wshShell: Set wshShell = WScript.CreateObject( "WScript.Shell" )
+
+    If strMessage = "" Then
+        On Error Resume Next
+        objProgressMsg.Terminate( )
+        On Error Goto 0
+        Exit Function
+    End If
+
+    strTempVBS = tfolder.Path + "\" & fso.GetTempName & ".vbs"
+
+    Set objTempMessage = fso.CreateTextFile( strTempVBS, True )
+    objTempMessage.WriteLine( "Msg" & "Box """ & strMessage & """, 4096, """ & strWindowTitle & """" )
+    objTempMessage.Close
+
+    On Error Resume Next
+    objProgressMsg.Terminate( )
+    On Error Goto 0
+
+    Set objProgressMsg = WshShell.Exec( "%windir%\system32\wscript.exe " & strTempVBS )
+
+    Set wshShell = Nothing
+
+End Function
+
 ' debugging facility
 ' can also use things like:
 '   WshShell.Run "cmd /d /c dir >> output.log", 0, true
@@ -82,12 +110,17 @@ if not fso.FileExists("putty.exe") then
      Wscript.Quit
    end if
 
+   wTitle = "Portable PuTTY"
+   
    ' download putty.exe
+   ProgressMsg "Preparing download", wTitle
    dim xHttp: Set xHttp = createobject("Microsoft.XMLHTTP")
    dim bStrm: Set bStrm = createobject("Adodb.Stream")
    xHttp.Open "GET", puttyUrl, False
    xHttp.Send
 
+
+   ProgressMsg "Downloading """"putty.exe""""", wTitle
    with bStrm
      .type = 1 '//binary
      .open
@@ -97,6 +130,8 @@ if not fso.FileExists("putty.exe") then
 
    set xHttp = Nothing
    set bStrm = Nothing
+
+   ProgressMsg "", wTitle
 end if
 
 localsessions = filterString(dumpReg())
