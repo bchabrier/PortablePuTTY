@@ -56,6 +56,9 @@ function filterString(s)
     filterString = result
 end function
 
+' debugging facility
+' can also use things like:
+'   WshShell.Run "cmd /d /c dir >> output.log", 0, true
 function debug(msg)
    if not fso.fileexists("output.log") then
       fso.createTextFile("ouput.log")
@@ -65,8 +68,6 @@ end function
 
 ' get current list of sessions
 if fso.FileExists("putty.reg") then
-   WshShell.Run "cmd /d /c echo " & "putty.reg exists" & " >> output.log", 0, true
-   WshShell.Run "cmd /d /c dir >> output.log", 0, true
    savedreg = fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll()
    savedsessions = filterString(savedreg)
 else
