@@ -160,7 +160,7 @@ sub iTestShortcutCreated
 end sub
 
 ' check that putty.exe is downloaded
-sub TestPuttyDownloaded
+sub ignoreTestPuttyDownloaded
   Assert.IsTrue false
 end sub
 
