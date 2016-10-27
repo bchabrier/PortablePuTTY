@@ -136,6 +136,22 @@ sub runPortablePuTTY
   Set WshShell = Nothing
 end sub
 
+' ignores the RandSeedFile part
+function filterRandSeedFile(regstr)
+    Set regEx = new RegExp
+
+    dim result: result = regstr
+
+    ' ignore RandSeedFile
+    regEx.Pattern = """RandSeedFile""=.*"
+    regEx.IgnoreCase = False
+    regEx.MultiLine = True
+    regEx.Global = False
+    result = regEx.Replace(result, "<ignore>")
+
+    filterRandSeedFile = result
+end function
+
 ' verifies that a shortcut is created
 ' when Portable PuTTY is run
 sub iTestShortcutCreated
@@ -184,7 +200,7 @@ sub TestNormalLaunchNoModif
   Assert.Equal readFile("putty.reg"), readFile("init.reg"), "putty.reg and init.reg should be identical at the start of the test"
   runPortablePuTTY
   Assert.IsTrue FileExists("putty.reg"), "putty.reg was not created"
-  Assert.Equal readFile("putty.reg"), readFile("init.reg"), "putty.reg and init.reg differ"
+  Assert.Equal filterRandSeedFile(readFile("putty.reg")), filterRandSeedFile(readFile("init.reg")), "putty.reg and init.reg differ"
   Assert.Equal dumpReg(), readFile("putty.reg"), "registry not as saved"
 end sub
 

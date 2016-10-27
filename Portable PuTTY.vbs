@@ -104,15 +104,20 @@ debug("not using local sessions")
   WshShell.Run "reg import putty.reg", 0, true
 
   ' update link to rnd file
-  WshShell.Run "reg add HKEY_CURRENT_USER\Software\SimonTatham\PuTTY /v RandSeedFile /d " & fso.BuildPath(CurrentDirectory, "putty.rnd") & " /f", 0, true
+  WshShell.Run "reg add HKEY_CURRENT_USER\Software\SimonTatham\PuTTY /v ""RandSeedFile"" /d """ & fso.BuildPath(CurrentDirectory, "putty.rnd") & """ /f", 0, true
 end if
 
 ' run executable, wait for its end
+debug("Running putty.exe")
 WshShell.Run "putty.exe", 1, true
 
 if not useLocalSessions then
+debug("still not using local")
   ' dump current sessions
   currentreg = dumpReg()
+
+debug("currentreg:")
+debug(currentreg)
 
   ' check if we need to save the current sessions
   if currentreg <> savedreg then
