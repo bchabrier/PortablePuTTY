@@ -117,8 +117,18 @@ if not useLocalSessions then
   ' check if we need to save the current sessions
   if currentreg <> savedreg then
 
+if fso.GetFile("init.reg").OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
+   debug("before copy, init.reg <> putty.reg")
+else
+   debug("before copy, init.reg = putty.reg")
+end if
 if fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll() <> fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll() then
    debug("before copy, tempregfilename <> putty.reg")
+debug("temp:")
+debug(fso.GetFile(tempregfilename).OpenAsTextStream(ForReading, -2).ReadAll())
+debug("putty.reg:")
+debug(fso.GetFile("putty.reg").OpenAsTextStream(ForReading, -2).ReadAll())
+debug("end")
 else
    debug("before copy, tempregfilename = putty.reg")
 end if
