@@ -75,16 +75,9 @@ end if
 
 localsessions = filterString(dumpReg())
 
-WshShell.Run "cmd /d /c echo " & "savedsessions" & " >> output.log", 0, true
-debug(savedsessions)
-WshShell.Run "cmd /d /c echo " & "localsessions" & " >> output.log", 0, true
-debug(localsessions)
-
 ' compare to local sessions
 useLocalSessions=false
 if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then
-
-debug("different")
 
     ' if different, propose to clear previous one
     ret = msgbox("Local sessions already exist:" & chr(10) & "coucou" & chr(10) & chr(10) & "You can choose to use them or to overwrite them with the saved session." & chr(10) & chr(10) & "Do you want to use the local sessions?", vbYesNoCancel, "Use local sessions?")
@@ -99,7 +92,6 @@ debug("different")
 end if
 
 if not useLocalSessions then
-debug("not using local sessions")
   ' import saved sessions
   WshShell.Run "reg import putty.reg", 0, true
 
@@ -108,16 +100,12 @@ debug("not using local sessions")
 end if
 
 ' run executable, wait for its end
-debug("Running putty.exe")
 WshShell.Run "putty.exe", 1, true
 
 if not useLocalSessions then
-debug("still not using local")
+
   ' dump current sessions
   currentreg = dumpReg()
-
-debug("currentreg:")
-debug(currentreg)
 
   ' check if we need to save the current sessions
   if currentreg <> savedreg then
