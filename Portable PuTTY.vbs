@@ -57,6 +57,9 @@ function filterString(s)
 end function
 
 function debug(msg)
+   if not fso.fileexists("output.log") then
+      fso.createTextFile("ouput.log")
+   end if
    fso.GetFile("output.log").OpenAsTextStream(8, -2).Write(msg & Chr(10))
 end function
 
