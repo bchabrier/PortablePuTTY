@@ -11,7 +11,7 @@ test_script:
   - tests\run_tests nopause
   - rem the below unfortunately doesn't work
   - rem ps: (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test_results.xml))  
-  - ps: select-string -path test_results.xml -pattern "success=""True"""
-  - ps: if ((select-string -path test_results.xml -pattern "success=""True""") -ne "") { errorstatement } 
+  - ps: select-string -path test_results.xml -pattern "success=""False"""
+  - ps: if ((select-string -path test_results.xml -pattern "success=""False""") -ne "") { errorstatement } 
   
   
