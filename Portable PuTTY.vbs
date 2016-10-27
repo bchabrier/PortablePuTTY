@@ -80,10 +80,8 @@ debug(localsessions)
 ' compare to local sessions
 useLocalSessions=false
 if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then
-'Wscript.Echo localsessions
-'script.Echo savedsessions
 
-WshShell.Run "cmd /d /c echo different >> output.log", 0, true
+debug("different")
 
     ' if different, propose to clear previous one
     ret = msgbox("Local sessions already exist:" & chr(10) & "coucou" & chr(10) & chr(10) & "You can choose to use them or to overwrite them with the saved session." & chr(10) & chr(10) & "Do you want to use the local sessions?", vbYesNoCancel, "Use local sessions?")
@@ -98,6 +96,7 @@ WshShell.Run "cmd /d /c echo different >> output.log", 0, true
 end if
 
 if not useLocalSessions then
+debug("not using local sessions")
   ' import saved sessions
   WshShell.Run "reg import putty.reg", 0, true
 
@@ -124,6 +123,7 @@ if not useLocalSessions then
     if fso.FileExists("putty.reg") then
 	    fso.MoveFile "putty.reg", "putty.bak"
     end if
+debug("copying to putty.reg")
     fso.CopyFile tempregfilename, "putty.reg"
   end if
 end if
