@@ -1,6 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/k04ikl250e64lwcq?svg=true)](https://ci.appveyor.com/project/bchabrier/portableputty)
 
-# PortablePuTTY
+# Portable PuTTY
 Portable packaging of PuTTY
 
 **Portable PuTTY** provides a portable version of **PuTTY** (see http://www.putty.org/).
@@ -18,8 +18,10 @@ A typical use is to install **Portable PuTTY** on a USB drive or a dropbox folde
 Launch `Portable PuTTY.vbs`.
 
 At first launch, this will perform two specific actions:
+
 1. create a shortcut named `Portable PuTTY.lnk`. You can then use this shortcut or copy it for instance to your desktop to launch **Portable PuTTY** more conveniently.
-2. download Simon Tatham's PuTTY from https://the.earth.li/~sgtatham/putty/latest/x86/putty.exe
+
+2. download Simon Tatham's PuTTY from https://the.earth.li/~sgtatham/putty/latest/x86/putty.exe.
 This is done only once, if `putty.exe` does not exist in the directory where `Portable PuTTY.vbs` is launched. If you want to use another version of `putty.exe`, you can copy it manually to this directory.
 
 ## Backup
