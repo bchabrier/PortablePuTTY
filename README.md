@@ -11,7 +11,13 @@ It allows to persist saved sessions and share them across computers.
 
 Installation consists in copying `Portable PuTTY.vbs` in a shared folder.
 
-A typical use is to install **Portable PuTTY** on a USB drive or a dropbox folder.
+A typical installation is to copy `Portable PuTTY.vbs`:
+
+- on a USB drive
+- in a Dropbox folder
+- in Box folder locally mounted through BoxSync or webdav
+
+**Portable PuTTY** will save all the needed information, including **PuTTY** sessions, on this shared folder. This way, all computers accessing this shared folder will share the same **PuTTY** sessions.
 
 ## Usage
 
