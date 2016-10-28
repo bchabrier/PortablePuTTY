@@ -229,8 +229,9 @@ sub TestCancelUseLocal
   Assert.NotEqual dumpReg(), readFile("run.reg"), "putty.exe should not have run"
 end sub
 
-
-
+' Summary of tests:
+' ----------------
+'
 ' preexisting       confirm    used by    modified by     after
 'local    saved     use local  putty.exe  putty.exe   local    saved    Scenario
 '------------------------------------------------------------------------------------------------
