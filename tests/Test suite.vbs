@@ -229,6 +229,19 @@ sub TestCancelUseLocal
   Assert.NotEqual dumpReg(), readFile("run.reg"), "putty.exe should not have run"
 end sub
 
+sub TestDisplayLocalSessions
+  prepareTest("TestDisplayLocalSessions")
+  deleteFile("msgboxdump.txt")
+  runPortablePuTTY
+  Assert.IsTrue FileExists("msgboxdump.txt"), "msgboxdump.txt was not created"
+
+  sessions = readFile("msgboxdump.txt")
+  sessions = Replace(sessions, """Local sessions already exist: ", "")
+  sessions = Replace(sessions, "  You can choose to use them or to overwrite them with the saved session.  Do you want to use the local sessions?"" " & Chr(13) & Chr(10), "")
+  Assert.Equal sessions, "session1 session2 session3", "local sessions are not correctly dumped"
+  deleteFile("msgboxdump.txt")
+end sub
+
 ' Summary of tests:
 ' ----------------
 '

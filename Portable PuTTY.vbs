@@ -134,6 +134,24 @@ if not fso.FileExists("putty.exe") then
    ProgressMsg "", wTitle
 end if
 
+function getLocalSessionsList(str)
+    Set regEx = new RegExp
+
+    regEx.Pattern = "\[.*\\SimonTatham\\PuTTY\\Sessions\\([^]]*)\]"
+    regEx.IgnoreCase = False
+    regEx.MultiLine = True
+    regEx.Global = True
+    set Matches = regEx.Execute(str)
+
+    result = ""
+    For Each Match in Matches
+       result = result & Match.SubMatches(0) & Chr(10)
+    Next
+
+    getLocalSessionsList = result
+    
+end function
+
 localsessions = filterString(dumpReg())
 
 ' compare to local sessions
@@ -141,7 +159,7 @@ useLocalSessions=false
 if localsessions <> savedsessions and savedsessions <> "<ignore>" and localsessions <> "<ignore>" then
 
     ' if different, propose to clear previous one
-    ret = msgbox("Local sessions already exist:" & chr(10) & "coucou" & chr(10) & chr(10) & "You can choose to use them or to overwrite them with the saved session." & chr(10) & chr(10) & "Do you want to use the local sessions?", vbYesNoCancel, "Use local sessions?")
+    ret = msgbox("Local sessions already exist:" & chr(10) & getLocalSessionsList(localsessions) & chr(10) & "You can choose to use them or to overwrite them with the saved session." & chr(10) & chr(10) & "Do you want to use the local sessions?", vbYesNoCancel, "Use local sessions?")
     Select case ret
     case vbCancel
        Wscript.Quit
