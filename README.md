@@ -40,3 +40,6 @@ This is done only once, if `putty.exe` does not already exist in the directory w
 
 The tests suite uses ScriptUnit (see http://xt1.org/scriptunit). Note that it is necessary to run `scriptunit.exe` as administrator once in order to register its libraries correctly.
 
+They are executed on Appveyor. The status is reflected by the badge at the top of this Readme.
+
+
