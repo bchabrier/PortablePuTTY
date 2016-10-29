@@ -47,11 +47,15 @@ function filterString(s)
     result = regEx.Replace(result, "<ignore>")
 
     ' ignore Recent sessions
-    regEx.Pattern = """Recent sessions""=.*"
+    ' note: The pattern [\s\S] matches any whitespace or non-whitespace character. 
+    ' You can't use . in this case, because that special character does not match newlines, 
+    ' and you want the expression to span multiple lines. The qualifiers * and ? mean 
+    ' "match any number of characters" and "use the shortest match" respectively. 
+    regEx.Pattern = """Recent sessions""=[\s\S]*?" & vbCrLf & vbCrLf 
     regEx.IgnoreCase = False
     regEx.MultiLine = True
     regEx.Global = False
-    result = regEx.Replace(result, "<ignore>")
+    result = regEx.Replace(result, "<ignore>" & vbCrLf & vbCrLf)
 
     filterString = result
 end function
